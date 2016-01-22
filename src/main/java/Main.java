@@ -10,7 +10,10 @@ import java.io.IOException;
  */
 public class Main {
 
-
+    // 微信公众号、企业号Java SDK
+//    https://github.com/chanjarster/weixin-java-tools
+    // 我们需要的是servlet例子
+    // https://github.com/chanjarster/weixin-java-tools/wiki/MP_Quick-Start
 
 
     public static void main(final String[] args) throws IOException {
