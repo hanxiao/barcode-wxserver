@@ -14,6 +14,8 @@ import java.io.IOException;
  */
 public class WechatServelet extends HttpServlet {
 
+    // barcodeimage handler for processing barcode
+    BarcodeImageHandler barcodeImageHandler = new BarcodeImageHandler();
     WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
     protected WxMpService wxMpService = new WxMpServiceImpl();
     protected WxMpMessageRouter wxMpMessageRouter;
@@ -30,22 +32,30 @@ public class WechatServelet extends HttpServlet {
 
         wxMpService.setWxMpConfigStorage(config);
 
+        // default text handler;
         WxMpMessageHandler handler =
                 (wxMpXmlMessage, map, wxMpService1, wxSessionManager) -> WxMpXmlOutMessage
-                .TEXT()
-                .content("测试加密消息")
-                .fromUser(wxMpXmlMessage.getToUserName())
-                .toUser(wxMpXmlMessage.getFromUserName())
-                .build();
+                        .TEXT()
+                        .content("测试加密消息")
+                        .fromUser(wxMpXmlMessage.getToUserName()) // now server is "from", client is "to"
+                        .toUser(wxMpXmlMessage.getFromUserName())
+                        .build();
+
+
 
         wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
+
         wxMpMessageRouter
                 .rule()
                 .async(false)
                 .content("哈哈") // 拦截内容为“哈哈”的消息
                 .handler(handler)
+                .end()
+                .rule()
+                .async(false)
+                .msgType("image") // forward anykind of image to barcode handler
+                .handler(barcodeImageHandler)
                 .end();
-
     }
 
     @Override

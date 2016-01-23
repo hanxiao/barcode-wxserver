@@ -1,0 +1,9 @@
+<servlet>
+    <servlet-name>test</servlet-name>
+    <servlet-class>WechatServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+<servlet-name>test</servlet-name>
+<url-pattern>/</url-pattern>
+</servlet-mapping>
